@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use ClinicOS\Auth\Auth;
+use ClinicOS\Audit\AuditLogger;
 use ClinicOS\Database\Connection;
 use ClinicOS\Security\Csrf;
 
@@ -26,10 +27,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (!$id || !in_array($status, $allowedStatuses, true)) {
         $error = 'Maklumat kemaskini tidak sah.';
     } else {
-        $stmt = $pdo->prepare('UPDATE appointments SET status = :status WHERE id = :id');
-        $stmt->execute(['status' => $status, 'id' => $id]);
-        header('Location: index.php?updated=1');
-        exit;
+        $previous = $pdo->prepare('SELECT status FROM appointments WHERE id = :id LIMIT 1');
+        $previous->execute(['id' => $id]);
+        $oldStatus = $previous->fetchColumn();
+        if ($oldStatus === false) {
+            $error = 'Temujanji tidak ditemui.';
+        } else {
+            $stmt = $pdo->prepare('UPDATE appointments SET status = :status WHERE id = :id');
+            $stmt->execute(['status' => $status, 'id' => $id]);
+            if ($oldStatus !== $status) {
+                AuditLogger::record($pdo, $user['id'], 'appointment.status_changed', 'appointment', $id);
+            }
+            header('Location: index.php?updated=1');
+            exit;
+        }
     }
 }
 
