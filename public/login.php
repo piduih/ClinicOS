@@ -2,7 +2,9 @@
 declare(strict_types=1);
 
 use ClinicOS\Auth\Auth;
+use ClinicOS\Audit\AuditLogger;
 use ClinicOS\Security\Csrf;
+use ClinicOS\Database\Connection;
 
 $dbConfig = require dirname(__DIR__) . '/app/bootstrap.php';
 
@@ -21,9 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL) && $password !== ''
             && Auth::attempt($email, $password, $dbConfig)) {
+            $auditUser = Auth::user($dbConfig);
+            AuditLogger::record(Connection::make($dbConfig), $auditUser['id'] ?? null, 'auth.login_succeeded');
             header('Location: index.php');
             exit;
         }
+        AuditLogger::record(Connection::make($dbConfig), null, 'auth.login_failed');
 
         $error = 'E-mel atau kata laluan tidak sah.';
     }
