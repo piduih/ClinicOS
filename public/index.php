@@ -42,7 +42,7 @@ $pageTitle = 'Dashboard';
           <a class="nav-link" href="patients/index.php">Pesakit</a>
           <a class="nav-link" href="appointments/index.php">Temujanji</a>
           <?php if ($user['role'] === 'admin'): ?>
-            <a class="nav-link" href="admin/users.php">Pengguna</a>
+            <a class="nav-link" href="admin/users.php">Pengguna</a>\n            <a class="nav-link" href="admin/audit-logs.php">Audit Log</a>
           <?php endif; ?>
         </nav>
       </aside>
@@ -58,7 +58,7 @@ $pageTitle = 'Dashboard';
             </div>
           </div>
           <div class="d-flex align-items-center gap-2">
-            <span class="badge rounded-pill text-bg-light border">Versi 0.5.0</span>
+            <span class="badge rounded-pill text-bg-light border">Versi 0.6.0</span>
             <form method="post" action="logout.php">
               <input type="hidden" name="_csrf" value="<?= htmlspecialchars(Csrf::token(), ENT_QUOTES, 'UTF-8') ?>">
               <button class="btn btn-outline-secondary btn-sm" type="submit">Log keluar</button>
