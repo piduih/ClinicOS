@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use ClinicOS\Auth\Auth;
+use ClinicOS\Audit\AuditLogger;
 use ClinicOS\Database\Connection;
 use ClinicOS\Security\Csrf;
 
@@ -60,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $data['id'] = $id;
                     $stmt = $pdo->prepare('UPDATE patients SET full_name=:full_name, date_of_birth=:date_of_birth, sex=:sex, phone=:phone, email=:email, address=:address, emergency_contact_name=:emergency_contact_name, emergency_contact_phone=:emergency_contact_phone, notes=:notes WHERE id=:id');
                     $stmt->execute($data);
+                    AuditLogger::record($pdo, $user['id'], 'patient.updated', 'patient', $id);
                     header('Location: view.php?id=' . $id . '&saved=1');
                 } else {
                     $mrn = 'CL-' . date('Ymd') . '-' . strtoupper(bin2hex(random_bytes(3)));
@@ -67,7 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $data['created_by'] = $user['id'];
                     $stmt = $pdo->prepare('INSERT INTO patients (medical_record_no, full_name, date_of_birth, sex, phone, email, address, emergency_contact_name, emergency_contact_phone, notes, created_by) VALUES (:medical_record_no, :full_name, :date_of_birth, :sex, :phone, :email, :address, :emergency_contact_name, :emergency_contact_phone, :notes, :created_by)');
                     $stmt->execute($data);
-                    header('Location: view.php?id=' . (int) $pdo->lastInsertId() . '&created=1');
+                    $newPatientId = (int) $pdo->lastInsertId();
+                    AuditLogger::record($pdo, $user['id'], 'patient.created', 'patient', $newPatientId);
+                    header('Location: view.php?id=' . $newPatientId . '&created=1');
                 }
                 exit;
             } catch (PDOException $exception) {
