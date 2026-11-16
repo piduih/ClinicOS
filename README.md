@@ -3,7 +3,7 @@
 ClinicOS is a web-based clinic management system.
 
 ## Version
-0.4.0 - patient and appointment foundation
+0.5.0 - clinic operations foundation
 
 ## Technology
 - PHP 8.3+
@@ -16,6 +16,7 @@ ClinicOS is a web-based clinic management system.
 - Dashboard foundation
 - Patient directory, search, registration, profile and editing
 - Appointment listing, date/status filters, scheduling and status updates
+- Administrator-only user management for creating, editing and deactivating accounts
 - Relational database schema
 
 ## Planned roles
@@ -41,7 +42,7 @@ Role permissions must be enforced on the server, not only hidden in the interfac
 Do not commit real credentials or production secrets.
 
 ## Current status
-This repository contains the initial database and authentication foundation. User administration, audit logging, login throttling, reminders, calendar integration, backup/restore and deployment hardening remain to be implemented and tested. It is not production-ready.
+This repository contains the initial database and authentication foundation. Audit logging, login throttling, password reset workflow, reminders, calendar integration, backup/restore and deployment hardening remain to be implemented and tested. It is not production-ready.
 
 ## License
 To be decided.
