@@ -42,7 +42,7 @@ $pageTitle = 'Dashboard';
           <a class="nav-link" href="patients/index.php">Pesakit</a>
           <a class="nav-link" href="appointments/index.php">Temujanji</a>
           <?php if ($user['role'] === 'admin'): ?>
-            <a class="nav-link disabled" href="#" aria-disabled="true">Pengguna · Akan datang</a>
+            <a class="nav-link" href="admin/users.php">Pengguna</a>
           <?php endif; ?>
         </nav>
       </aside>
@@ -58,7 +58,7 @@ $pageTitle = 'Dashboard';
             </div>
           </div>
           <div class="d-flex align-items-center gap-2">
-            <span class="badge rounded-pill text-bg-light border">Versi 0.4.0</span>
+            <span class="badge rounded-pill text-bg-light border">Versi 0.5.0</span>
             <form method="post" action="logout.php">
               <input type="hidden" name="_csrf" value="<?= htmlspecialchars(Csrf::token(), ENT_QUOTES, 'UTF-8') ?>">
               <button class="btn btn-outline-secondary btn-sm" type="submit">Log keluar</button>
@@ -92,7 +92,7 @@ $pageTitle = 'Dashboard';
 
         <section class="content-card">
           <h2 class="h5 mb-2">Asas keselamatan telah disediakan</h2>
-          <p class="text-secondary mb-0">Modul pesakit dan temujanji kini menyediakan aliran asas pendaftaran, carian, penjadualan dan kemaskini.</p>
+          <p class="text-secondary mb-0">Modul pesakit, temujanji dan pengurusan pengguna kini menyediakan aliran operasi asas.</p>
         </section>
       </main>
     </div>
