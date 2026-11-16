@@ -42,7 +42,9 @@ $pageTitle = 'Dashboard';
           <a class="nav-link" href="patients/index.php">Pesakit</a>
           <a class="nav-link" href="appointments/index.php">Temujanji</a>
           <?php if ($user['role'] === 'admin'): ?>
-            <a class="nav-link" href="admin/users.php">Pengguna</a>\n            <a class="nav-link" href="admin/audit-logs.php">Audit Log</a>
+            <a class="nav-link" href="admin/users.php">Pengguna</a>
+            <a class="nav-link" href="admin/audit-logs.php">Audit Log</a>
+            <a class="nav-link" href="admin/audit-logs.php">Audit Log</a>
           <?php endif; ?>
         </nav>
       </aside>
