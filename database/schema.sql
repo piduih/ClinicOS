@@ -59,3 +59,22 @@ CREATE TABLE IF NOT EXISTS appointments (
   INDEX idx_appointments_scheduled_at (scheduled_at),
   INDEX idx_appointments_status (status)
 ) ENGINE=InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS audit_logs (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  actor_user_id BIGINT UNSIGNED NULL,
+  event VARCHAR(80) NOT NULL,
+  entity_type VARCHAR(40) NULL,
+  entity_id BIGINT UNSIGNED NULL,
+  ip_address VARCHAR(45) NULL,
+  user_agent VARCHAR(255) NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_audit_logs_actor
+    FOREIGN KEY (actor_user_id) REFERENCES users(id)
+    ON DELETE SET NULL,
+  INDEX idx_audit_logs_created_at (created_at),
+  INDEX idx_audit_logs_event_created (event, created_at),
+  INDEX idx_audit_logs_actor_created (actor_user_id, created_at),
+  INDEX idx_audit_logs_entity (entity_type, entity_id)
+) ENGINE=InnoDB;
