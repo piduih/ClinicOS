@@ -6,7 +6,7 @@ use ClinicOS\Database\Connection;
 use ClinicOS\Security\Csrf;
 
 $dbConfig = require dirname(__DIR__, 2) . '/app/bootstrap.php';
-Auth::requireRole($dbConfig, ['admin']);
+$currentAdmin = Auth::requireRole($dbConfig, ['admin']);
 $pdo = Connection::make($dbConfig);
 $id = filter_var($_GET['id'] ?? $_POST['id'] ?? null, FILTER_VALIDATE_INT) ?: null;
 $userData = ['full_name'=>'','email'=>'','role'=>'receptionist','is_active'=>'1'];
@@ -49,6 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $currentStmt->execute(['id'=>$id]);
                     $current = $currentStmt->fetch();
                     if (!$current) { throw new RuntimeException('User not found.'); }
+                    if ($id === $currentAdmin['id'] && ($userData['role'] !== 'admin' || $userData['is_active'] === '0')) {
+                        $error = 'Anda tidak boleh menukar role atau menyahaktifkan akaun sendiri.';
+                    }
+                    if ($error === '' && $current['role']==='admin' && (bool)$current['is_active']
                     if ($current['role']==='admin' && (bool)$current['is_active']
                         && ($userData['role']!=='admin' || $userData['is_active']==='0')) {
                         $adminCount=(int)$pdo->query("SELECT COUNT(*) FROM users WHERE role='admin' AND is_active=1")->fetchColumn();
