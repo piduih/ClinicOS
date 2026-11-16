@@ -39,7 +39,7 @@ $pageTitle = 'Dashboard';
         <div class="small text-uppercase text-secondary mb-2">Menu utama</div>
         <nav class="nav flex-column gap-2">
           <a class="nav-link active" href="index.php">Dashboard</a>
-          <a class="nav-link disabled" href="#" aria-disabled="true">Pesakit · Akan datang</a>
+          <a class="nav-link" href="patients/index.php">Pesakit</a>
           <a class="nav-link disabled" href="#" aria-disabled="true">Temujanji · Akan datang</a>
           <?php if ($user['role'] === 'admin'): ?>
             <a class="nav-link disabled" href="#" aria-disabled="true">Pengguna · Akan datang</a>
@@ -58,7 +58,7 @@ $pageTitle = 'Dashboard';
             </div>
           </div>
           <div class="d-flex align-items-center gap-2">
-            <span class="badge rounded-pill text-bg-light border">Versi 0.2.0</span>
+            <span class="badge rounded-pill text-bg-light border">Versi 0.3.0</span>
             <form method="post" action="logout.php">
               <input type="hidden" name="_csrf" value="<?= htmlspecialchars(Csrf::token(), ENT_QUOTES, 'UTF-8') ?>">
               <button class="btn btn-outline-secondary btn-sm" type="submit">Log keluar</button>
@@ -92,7 +92,7 @@ $pageTitle = 'Dashboard';
 
         <section class="content-card">
           <h2 class="h5 mb-2">Asas keselamatan telah disediakan</h2>
-          <p class="text-secondary mb-0">Log masuk, sesi pengguna, CSRF token dan semakan role kini tersedia. Modul pesakit dan temujanji akan dibangunkan selepas asas ini.</p>
+          <p class="text-secondary mb-0">Modul pesakit kini menyokong pendaftaran, carian, paparan profil dan kemaskini. Modul temujanji akan dibangunkan seterusnya.</p>
         </section>
       </main>
     </div>
