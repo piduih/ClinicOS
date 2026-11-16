@@ -18,7 +18,9 @@ ClinicOS is a web-based clinic management system.
 - Dashboard with database-backed summary counts
 - Patient directory, search, registration, profile and editing
 - Appointment listing, date/status filters, scheduling and status updates
-- Administrator-only user management: create, edit, activate and deactivate accounts\n- Audit trail for authentication and user administration\n- Administrator-only, read-only audit log viewer with date/event filters and pagination
+- Administrator-only user management: create, edit, activate and deactivate accounts
+- Audit trail for authentication and user administration
+- Administrator-only, read-only audit log viewer with date/event filters and pagination
 - Relational database schema
 
 ## Roles
@@ -52,7 +54,8 @@ This repository contains a development foundation. Login throttling, self-servic
 - `docs/SECURITY.md`
 - `docs/PATIENTS.md`
 - `docs/APPOINTMENTS.md`
-- `docs/USERS.md`\n- `docs/AUDIT-LOG.md`
+- `docs/USERS.md`
+- `docs/AUDIT-LOG.md`
 
 ## License
 To be decided.
