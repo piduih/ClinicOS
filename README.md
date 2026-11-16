@@ -3,7 +3,7 @@
 ClinicOS is a web-based clinic management system.
 
 ## Version
-0.3.0 - patient management foundation
+0.4.0 - patient and appointment foundation
 
 ## Technology
 - PHP 8.3+
@@ -15,6 +15,7 @@ ClinicOS is a web-based clinic management system.
 - Login/logout with session regeneration and CSRF protection\n- Server-side role guard for administrator, doctor and receptionist\n- CLI-only first administrator setup
 - Dashboard foundation
 - Patient directory, search, registration, profile and editing
+- Appointment listing, date/status filters, scheduling and status updates
 - Relational database schema
 
 ## Planned roles
@@ -40,7 +41,7 @@ Role permissions must be enforced on the server, not only hidden in the interfac
 Do not commit real credentials or production secrets.
 
 ## Current status
-This repository contains the initial database and authentication foundation. Appointment workflows, user administration, audit logging, login throttling, backup/restore and deployment hardening remain to be implemented and tested. It is not production-ready.
+This repository contains the initial database and authentication foundation. User administration, audit logging, login throttling, reminders, calendar integration, backup/restore and deployment hardening remain to be implemented and tested. It is not production-ready.
 
 ## License
 To be decided.
