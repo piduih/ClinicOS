@@ -68,12 +68,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $save=$pdo->prepare($sql);
                         $save->execute($params);
                         AuditLogger::record($pdo, $currentAdmin['id'], 'user.updated', 'user', $id);
-                        AuditLogger::record($pdo, $currentAdmin['id'], 'user.updated', 'user', $id);
                     }
                 } else {
                     $save=$pdo->prepare('INSERT INTO users (full_name,email,password_hash,role,is_active) VALUES (:full_name,:email,:password_hash,:role,:is_active)');
                     $save->execute(['full_name'=>$userData['full_name'],'email'=>$userData['email'],'password_hash'=>password_hash($password,PASSWORD_DEFAULT),'role'=>$userData['role'],'is_active'=>(int)$userData['is_active']]);
-                    AuditLogger::record($pdo, $currentAdmin['id'], 'user.created', 'user', (int) $pdo->lastInsertId());
                     AuditLogger::record($pdo, $currentAdmin['id'], 'user.created', 'user', (int) $pdo->lastInsertId());
                 }
                 if ($error==='') { header('Location: users.php?saved=1'); exit; }
