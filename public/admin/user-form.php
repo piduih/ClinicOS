@@ -52,7 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ($id === $currentAdmin['id'] && ($userData['role'] !== 'admin' || $userData['is_active'] === '0')) {
                         $error = 'Anda tidak boleh menukar role atau menyahaktifkan akaun sendiri.';
                     }
-                    if ($error === '' && $current['role']==='admin' && (bool)$current['is_active']
                     if ($current['role']==='admin' && (bool)$current['is_active']
                         && ($userData['role']!=='admin' || $userData['is_active']==='0')) {
                         $adminCount=(int)$pdo->query("SELECT COUNT(*) FROM users WHERE role='admin' AND is_active=1")->fetchColumn();
