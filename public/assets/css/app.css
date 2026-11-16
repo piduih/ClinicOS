@@ -1,0 +1,57 @@
+:root {
+  --clinic-ink: #172b4d;
+  --clinic-muted: #6b778c;
+  --clinic-bg: #f5f7fb;
+  --clinic-line: #e7ebf2;
+  --clinic-accent: #167d75;
+}
+
+body {
+  background: var(--clinic-bg);
+  color: var(--clinic-ink);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.sidebar {
+  background: #fff;
+  border-right: 1px solid var(--clinic-line);
+}
+
+.brand {
+  color: var(--clinic-ink);
+  font-size: 1.65rem;
+  font-weight: 750;
+  letter-spacing: -0.06em;
+}
+
+.brand span {
+  color: var(--clinic-accent);
+}
+
+.sidebar .nav-link {
+  border-radius: 0.75rem;
+  color: var(--clinic-muted);
+  padding: 0.75rem 1rem;
+}
+
+.sidebar .nav-link.active {
+  background: #e8f4f2;
+  color: var(--clinic-accent);
+  font-weight: 650;
+}
+
+.stat-card,
+.content-card {
+  background: #fff;
+  border: 1px solid var(--clinic-line);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  height: 100%;
+  box-shadow: 0 8px 24px rgba(23, 43, 77, 0.035);
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    min-height: 100vh;
+  }
+}
