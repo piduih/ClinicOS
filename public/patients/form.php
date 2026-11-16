@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = 'Pilihan jantina tidak sah.';
         } elseif ($patient['email'] !== '' && !filter_var($patient['email'], FILTER_VALIDATE_EMAIL)) {
             $error = 'Format e-mel tidak sah.';
-        } elseif ($patient['date_of_birth'] !== '' && (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $patient['date_of_birth']) || !strtotime($patient['date_of_birth']))) {
+        } elseif ($patient['date_of_birth'] !== '' && (!preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $patient['date_of_birth'], $dateParts) || !checkdate((int) ($dateParts[2] ?? 0), (int) ($dateParts[3] ?? 0), (int) ($dateParts[1] ?? 0)))) {
             $error = 'Tarikh lahir tidak sah.';
         } else {
             try {
