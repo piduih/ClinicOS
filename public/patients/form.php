@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $patient[$field] = trim((string) ($_POST[$field] ?? ''));
         }
         $allowedSex = ['male', 'female', 'other', 'unknown'];
-        if ($patient['full_name'] === '' || mb_strlen($patient['full_name']) > 150) {
+        if ($patient['full_name'] === '' || strlen($patient['full_name']) > 600) {
             $error = 'Nama pesakit wajib diisi dan tidak melebihi 150 aksara.';
         } elseif (!in_array($patient['sex'], $allowedSex, true)) {
             $error = 'Pilihan jantina tidak sah.';
