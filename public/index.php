@@ -1,8 +1,25 @@
 <?php
 declare(strict_types=1);
 
-session_start();
+use ClinicOS\Auth\Auth;
+use ClinicOS\Security\Csrf;
+use ClinicOS\Database\Connection;
 
+$dbConfig = require dirname(__DIR__) . '/app/bootstrap.php';
+$user = Auth::requireLogin($dbConfig);
+$pdo = Connection::make($dbConfig);
+
+$patientCount = (int) $pdo->query('SELECT COUNT(*) FROM patients')->fetchColumn();
+$todayStatement = $pdo->prepare('SELECT COUNT(*) FROM appointments WHERE DATE(scheduled_at) = CURRENT_DATE()');
+$todayStatement->execute();
+$todayAppointments = (int) $todayStatement->fetchColumn();
+$activeUsers = (int) $pdo->query('SELECT COUNT(*) FROM users WHERE is_active = 1')->fetchColumn();
+
+$roleLabels = [
+    'admin' => 'Administrator',
+    'doctor' => 'Doktor',
+    'receptionist' => 'Receptionist',
+];
 $pageTitle = 'Dashboard';
 ?>
 <!doctype html>
@@ -22,9 +39,11 @@ $pageTitle = 'Dashboard';
         <div class="small text-uppercase text-secondary mb-2">Menu utama</div>
         <nav class="nav flex-column gap-2">
           <a class="nav-link active" href="index.php">Dashboard</a>
-          <a class="nav-link disabled" href="#" aria-disabled="true">Pesakit</a>
-          <a class="nav-link disabled" href="#" aria-disabled="true">Temujanji</a>
-          <a class="nav-link disabled" href="#" aria-disabled="true">Pengguna</a>
+          <a class="nav-link disabled" href="#" aria-disabled="true">Pesakit · Akan datang</a>
+          <a class="nav-link disabled" href="#" aria-disabled="true">Temujanji · Akan datang</a>
+          <?php if ($user['role'] === 'admin'): ?>
+            <a class="nav-link disabled" href="#" aria-disabled="true">Pengguna · Akan datang</a>
+          <?php endif; ?>
         </nav>
       </aside>
 
@@ -32,38 +51,48 @@ $pageTitle = 'Dashboard';
         <header class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-5">
           <div>
             <p class="text-secondary mb-1">Sistem Pengurusan Klinik</p>
-            <h1 class="h3 mb-0">Dashboard</h1>
+            <h1 class="h3 mb-1">Dashboard</h1>
+            <div class="text-secondary small">
+              Selamat datang, <?= htmlspecialchars($user['full_name'], ENT_QUOTES, 'UTF-8') ?>
+              · <?= htmlspecialchars($roleLabels[$user['role']] ?? $user['role'], ENT_QUOTES, 'UTF-8') ?>
+            </div>
           </div>
-          <span class="badge rounded-pill text-bg-light border">Versi 0.1.0</span>
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge rounded-pill text-bg-light border">Versi 0.2.0</span>
+            <form method="post" action="logout.php">
+              <input type="hidden" name="_csrf" value="<?= htmlspecialchars(Csrf::token(), ENT_QUOTES, 'UTF-8') ?>">
+              <button class="btn btn-outline-secondary btn-sm" type="submit">Log keluar</button>
+            </form>
+          </div>
         </header>
 
         <section class="row g-3 mb-4" aria-label="Ringkasan">
           <div class="col-12 col-sm-6 col-xl-4">
             <article class="stat-card">
               <p class="text-secondary mb-2">Jumlah pesakit</p>
-              <div class="display-6 fw-semibold">—</div>
-              <small class="text-secondary">Belum disambungkan ke pangkalan data</small>
+              <div class="display-6 fw-semibold"><?= number_format($patientCount) ?></div>
+              <small class="text-secondary">Rekod dalam pangkalan data</small>
             </article>
           </div>
           <div class="col-12 col-sm-6 col-xl-4">
             <article class="stat-card">
               <p class="text-secondary mb-2">Temujanji hari ini</p>
-              <div class="display-6 fw-semibold">—</div>
-              <small class="text-secondary">Belum disambungkan ke pangkalan data</small>
+              <div class="display-6 fw-semibold"><?= number_format($todayAppointments) ?></div>
+              <small class="text-secondary">Mengikut tarikh pelayan</small>
             </article>
           </div>
           <div class="col-12 col-sm-6 col-xl-4">
             <article class="stat-card">
               <p class="text-secondary mb-2">Pengguna aktif</p>
-              <div class="display-6 fw-semibold">—</div>
-              <small class="text-secondary">Belum disambungkan ke pangkalan data</small>
+              <div class="display-6 fw-semibold"><?= number_format($activeUsers) ?></div>
+              <small class="text-secondary">Akaun aktif</small>
             </article>
           </div>
         </section>
 
         <section class="content-card">
-          <h2 class="h5 mb-2">ClinicOS sedang dibangunkan</h2>
-          <p class="text-secondary mb-0">Ini ialah rangka awal antara muka. Modul pesakit, temujanji, log masuk dan kawalan akses akan dibina secara berperingkat.</p>
+          <h2 class="h5 mb-2">Asas keselamatan telah disediakan</h2>
+          <p class="text-secondary mb-0">Log masuk, sesi pengguna, CSRF token dan semakan role kini tersedia. Modul pesakit dan temujanji akan dibangunkan selepas asas ini.</p>
         </section>
       </main>
     </div>
