@@ -63,6 +63,7 @@ $appointments = $stmt->fetchAll();
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Temujanji | ClinicOS</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"><link href="../assets/css/app.css" rel="stylesheet"></head>
 <body><main class="container-fluid px-3 px-lg-5 py-4 py-lg-5">
 <header class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4"><div><div class="brand">Clinic<span>OS</span></div><h1 class="h3 mt-3 mb-0">Pengurusan temujanji</h1></div><div class="d-flex gap-2"><a class="btn btn-outline-secondary" href="../index.php">Dashboard</a><a class="btn btn-clinic" href="form.php">Temujanji baharu</a></div></header>
+<?php if (isset($_GET['saved'])): ?><div class="alert alert-success">Temujanji berjaya disimpan.</div><?php endif; ?>
 <?php if ($error): ?><div class="alert alert-danger"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div><?php endif; ?>
 <?php if (isset($_GET['updated'])): ?><div class="alert alert-success">Status temujanji berjaya dikemaskini.</div><?php endif; ?>
 <section class="content-card mb-3"><form method="get" class="row g-2 align-items-end">
