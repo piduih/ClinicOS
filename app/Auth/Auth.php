@@ -18,7 +18,7 @@ final class Auth
             'SELECT id, full_name, email, password_hash, role, is_active
              FROM users WHERE email = :email LIMIT 1'
         );
-        $statement->execute(['email' => mb_strtolower(trim($email))]);
+        $statement->execute(['email' => strtolower(trim($email))]);
         $user = $statement->fetch(PDO::FETCH_ASSOC);
 
         if (!$user || !(bool) $user['is_active'] || !password_verify($password, $user['password_hash'])) {
