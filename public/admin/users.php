@@ -36,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $update = $pdo->prepare('UPDATE users SET is_active=:active WHERE id=:id');
             $update->execute(['active'=>$active ? 1 : 0, 'id'=>$id]);
             AuditLogger::record($pdo, $current['id'], $active ? 'user.activated' : 'user.deactivated', 'user', $id);
-            AuditLogger::record($pdo, $current['id'], $active ? 'user.activated' : 'user.deactivated', 'user', $id);
             header('Location: users.php?updated=1');
             exit;
         }
