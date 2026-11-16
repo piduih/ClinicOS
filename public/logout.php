@@ -16,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !Csrf::verify($_POST['_csrf'] ?? nu
 $user = Auth::user($dbConfig);
 AuditLogger::record(Connection::make($dbConfig), $user['id'] ?? null, 'auth.logout');
 $user = Auth::user($dbConfig);
-AuditLogger::record(Connection::make($dbConfig), $user['id'] ?? null, 'auth.logout');
 Auth::logout();
 header('Location: login.php');
 exit;
