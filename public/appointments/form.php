@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use ClinicOS\Auth\Auth;
+use ClinicOS\Audit\AuditLogger;
 use ClinicOS\Database\Connection;
 use ClinicOS\Security\Csrf;
 
@@ -87,10 +88,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $values['id'] = $id;
                         $save = $pdo->prepare('UPDATE appointments SET patient_id=:patient_id, doctor_id=:doctor_id, scheduled_at=:scheduled_at, reason=:reason WHERE id=:id');
                         $save->execute($values);
+                        AuditLogger::record($pdo, $user['id'], 'appointment.updated', 'appointment', $id);
                     } else {
                         $values['created_by'] = $user['id'];
                         $save = $pdo->prepare('INSERT INTO appointments (patient_id, doctor_id, scheduled_at, reason, created_by) VALUES (:patient_id, :doctor_id, :scheduled_at, :reason, :created_by)');
                         $save->execute($values);
+                        AuditLogger::record($pdo, $user['id'], 'appointment.created', 'appointment', (int) $pdo->lastInsertId());
                     }
                     header('Location: index.php?saved=1');
                     exit;
