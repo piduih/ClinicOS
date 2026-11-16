@@ -15,7 +15,6 @@ $stmt->execute(['id'=>$id]);
 $p = $stmt->fetch();
 if (!$p) { http_response_code(404); exit('Patient record not found.'); }
 AuditLogger::record($pdo, $user['id'], 'patient.viewed', 'patient', $id);
-AuditLogger::record($pdo, $user['id'], 'patient.viewed', 'patient', $id);
 $e = static fn($v) => htmlspecialchars((string)($v ?: '—'), ENT_QUOTES, 'UTF-8');
 $sexLabels = ['male'=>'Lelaki','female'=>'Perempuan','other'=>'Lain-lain','unknown'=>'Tidak dinyatakan'];
 ?>
