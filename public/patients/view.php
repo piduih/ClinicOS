@@ -5,14 +5,14 @@ use ClinicOS\Auth\Auth;
 use ClinicOS\Database\Connection;
 
 $dbConfig = require dirname(__DIR__, 2) . '/app/bootstrap.php';
-Auth::requireLogin($dbConfig);
+$user = Auth::requireLogin($dbConfig);
 $id = filter_var($_GET['id'] ?? null, FILTER_VALIDATE_INT);
 if (!$id) { http_response_code(400); exit('Invalid patient ID.'); }
 $pdo = Connection::make($dbConfig);
 $stmt = $pdo->prepare('SELECT p.*, u.full_name AS created_by_name FROM patients p LEFT JOIN users u ON u.id=p.created_by WHERE p.id=:id LIMIT 1');
 $stmt->execute(['id'=>$id]);
 $p = $stmt->fetch();
-if (!$p) { http_response_code(404); exit('Patient record not found.'); }
+if (!$p) { http_response_code(404); exit('Patient record not found.'); }\nAuditLogger::record($pdo, $user['id'], 'patient.viewed', 'patient', $id);
 $e = static fn($v) => htmlspecialchars((string)($v ?: '—'), ENT_QUOTES, 'UTF-8');
 $sexLabels = ['male'=>'Lelaki','female'=>'Perempuan','other'=>'Lain-lain','unknown'=>'Tidak dinyatakan'];
 ?>
