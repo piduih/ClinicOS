@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use ClinicOS\Auth\Auth;
+use ClinicOS\Audit\AuditLogger;
 use ClinicOS\Database\Connection;
 use ClinicOS\Security\Csrf;
 
@@ -65,11 +66,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if ($password!=='') { $sql.=', password_hash=:password_hash'; $params['password_hash']=password_hash($password,PASSWORD_DEFAULT); }
                         $sql.=' WHERE id=:id';
                         $save=$pdo->prepare($sql);
-                        $save->execute($params);\n                        AuditLogger::record($pdo, $currentAdmin['id'], 'user.updated', 'user', $id);
+                        $save->execute($params);
+                        AuditLogger::record($pdo, $currentAdmin['id'], 'user.updated', 'user', $id);
+                        AuditLogger::record($pdo, $currentAdmin['id'], 'user.updated', 'user', $id);
                     }
                 } else {
                     $save=$pdo->prepare('INSERT INTO users (full_name,email,password_hash,role,is_active) VALUES (:full_name,:email,:password_hash,:role,:is_active)');
-                    $save->execute(['full_name'=>$userData['full_name'],'email'=>$userData['email'],'password_hash'=>password_hash($password,PASSWORD_DEFAULT),'role'=>$userData['role'],'is_active'=>(int)$userData['is_active']]);\n                    AuditLogger::record($pdo, $currentAdmin['id'], 'user.created', 'user', (int) $pdo->lastInsertId());
+                    $save->execute(['full_name'=>$userData['full_name'],'email'=>$userData['email'],'password_hash'=>password_hash($password,PASSWORD_DEFAULT),'role'=>$userData['role'],'is_active'=>(int)$userData['is_active']]);
+                    AuditLogger::record($pdo, $currentAdmin['id'], 'user.created', 'user', (int) $pdo->lastInsertId());
+                    AuditLogger::record($pdo, $currentAdmin['id'], 'user.created', 'user', (int) $pdo->lastInsertId());
                 }
                 if ($error==='') { header('Location: users.php?saved=1'); exit; }
             } catch (PDOException $exception) {
